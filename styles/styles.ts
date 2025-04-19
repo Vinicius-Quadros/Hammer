@@ -1,0 +1,278 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f8f8f8',
+  },
+  setupContainer: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  gameContainer: {
+    flex: 1,
+    padding: 15,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 18,
+    color: '#34495E',
+    marginBottom: 5,
+  },
+  hint: {
+    fontSize: 14,
+    color: '#7F8C8D',
+    marginBottom: 20,
+    fontStyle: 'italic',
+  },
+  roundInfo: {
+    fontSize: 16,
+    color: '#34495E',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  input: {
+    width: '100%',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#BDC3C7',
+    borderRadius: 8,
+    fontSize: 16,
+    marginBottom: 20,
+    backgroundColor: 'white',
+  },
+  button: {
+    backgroundColor: '#3498DB',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginVertical: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  secondaryButton: {
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#3498DB',
+  },
+  dangerButton: {
+    backgroundColor: '#E74C3C',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  secondaryButtonText: {
+    color: '#3498DB',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  scoreTable: {
+    flex: 1,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    marginBottom: 15,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#3498DB',
+    padding: 12,
+  },
+  headerCell: {
+    color: 'white',
+    fontWeight: 'bold',
+    flex: 1,
+    textAlign: 'center',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5E5',
+    padding: 12,
+  },
+  tableCell: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 14,
+    paddingHorizontal: 2,
+  },
+  editableCell: {
+    borderBottomWidth: 1,
+    borderStyle: 'dashed',
+    borderBottomColor: '#3498DB',
+  },
+  scoreColumnContainer: {
+    flex: 1,
+    maxWidth: 45, // Limita a largura da coluna de pontuação
+    overflow: 'hidden',
+  },
+  totalCell: {
+    fontWeight: 'bold',
+  },
+  buttonContainer: {
+    marginBottom: 15,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '90%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    maxHeight: '90%',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    textAlign: 'center',
+    color: '#2C3E50',
+  },
+  modalInfo: {
+    fontSize: 14,
+    marginBottom: 15,
+    color: '#7F8C8D',
+    textAlign: 'center',
+  },
+  modalScroll: {
+    marginBottom: 15,
+    maxHeight: 400,
+  },
+  scoreInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    paddingVertical: 5,
+  },
+  playerName: {
+    flex: 2,
+    fontSize: 16,
+    color: '#2C3E50',
+  },
+  scoreInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#BDC3C7',
+    borderRadius: 6,
+    padding: 10,
+    textAlign: 'center',
+    height: 44,
+    fontSize: 16,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  modalButton: {
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  winnerContainer: {
+    backgroundColor: '#D5F5E3',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#2ECC71',
+  },
+  winnerText: {
+    color: '#27AE60',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  paymentContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+    backgroundColor: '#F8F9F9',
+    padding: 10,
+    borderRadius: 6,
+  },
+  paymentText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  receiveText: {
+    color: '#27AE60',
+  },
+  payText: {
+    color: '#E74C3C',
+  },
+  // Estilos da tabela de pontuação final
+  finalScoreTable: {
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 6,
+    overflow: 'hidden',
+  },
+  finalScoreHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#3498DB',
+    padding: 10,
+  },
+  finalScoreHeaderText: {
+    color: 'white',
+    fontWeight: 'bold',
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 12,
+  },
+  finalScoreRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5E5',
+    padding: 8,
+    backgroundColor: 'white',
+  },
+  finalScorePlayerName: {
+    flex: 1,
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: '#2C3E50',
+  },
+  finalScoreCell: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 12,
+  },
+  finalScoreTotalCell: {
+    flex: 1,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 12,
+    color: '#E74C3C',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#BDC3C7',
+    marginVertical: 15,
+  },
+  paymentSectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 10,
+  },
+});

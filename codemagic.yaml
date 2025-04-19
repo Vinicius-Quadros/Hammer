@@ -17,10 +17,10 @@ workflows:
         script: |
           cd ios && pod install
 
-      - name: Compilar para simulador
+      - name: Compilar para iOS (Debug)
         script: |
           cd ios
-          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME" --destination 'generic/platform=iOS Simulator'
+          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME" --config Debug
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log

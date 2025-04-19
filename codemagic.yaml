@@ -1,19 +1,14 @@
 workflows:
-  react-native-ios:
-    name: React Native iOS
+  react-native-ios-dev:
+    name: React Native iOS (Dev)
     max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
       vars:
-        BUNDLE_ID: "io.github.vinicius-quadros.hammer" # Substitua pelo seu ID de pacote real
-        XCODE_WORKSPACE: "Hammer.xcworkspace" # Substitua pelo nome real do seu workspace
-        XCODE_SCHEME: "Hammer" # Substitua pelo nome real do seu scheme
+        BUNDLE_ID: "io.github.vinicius-quadros.hammer"
+        XCODE_WORKSPACE: "Hammer.xcworkspace"
+        XCODE_SCHEME: "Hammer"
     scripts:
-      - name: Configurar localização da raiz do projeto
-        script: |
-          echo "Diretório de trabalho: $CM_BUILD_DIR"
-          ls -la
-
       - name: Instalar dependências npm
         script: |
           npm install
@@ -22,16 +17,10 @@ workflows:
         script: |
           cd ios && pod install
 
-      - name: Configurar assinatura de código
-        script: |
-          keychain initialize
-          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_DEVELOPMENT --create
-          keychain add-certificates
-
-      - name: Compilar aplicativo iOS
+      - name: Compilar para simulador
         script: |
           cd ios
-          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
+          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME" --destination 'generic/platform=iOS Simulator'
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log

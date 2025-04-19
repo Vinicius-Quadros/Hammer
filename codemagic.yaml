@@ -1,6 +1,6 @@
 workflows:
-  react-native-ios-basic:
-    name: React Native iOS (Básico)
+  react-native-ios-dev:
+    name: React Native iOS (Dev Build)
     max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
@@ -17,10 +17,18 @@ workflows:
         script: |
           cd ios && pod install
 
-      - name: Compilar para iOS (Debug)
+      - name: Build para desenvolvimento
         script: |
           cd ios
-          xcodebuild -workspace "$XCODE_WORKSPACE" -scheme "$XCODE_SCHEME" -configuration Debug -sdk iphonesimulator build
+          xcodebuild -workspace "$XCODE_WORKSPACE" -scheme "$XCODE_SCHEME" -configuration Debug -sdk iphoneos -derivedDataPath build
+          
+      - name: Criar arquivo .app executável
+        script: |
+          cd ios
+          mkdir -p artifacts
+          cp -r build/Build/Products/Debug-iphoneos/*.app artifacts/
+          
     artifacts:
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+      - ios/artifacts/*.app
+      - ios/build/Build/Products/Debug-iphoneos/*.app
       - /tmp/xcodebuild_logs/*.log

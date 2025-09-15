@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Hammer - Jogo de Cartas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f8f8;
+            height: 100vh;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        /* Setup Screen Styles */
+        .setup-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            padding: 20px;
+            justify-content: space-between;
+        }
+
+        .header-container {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .main-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-line {
+            flex: 1;
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+
+        .card-title {
+            padding: 0 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #2a5298;
+        }
+
+        .instruction-text {
+            font-size: 18px;
+            color: #2C3E50;
+            text-align: center;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .hint-text {
+            font-size: 14px;
+            color: #95a5a6;
+            text-align: center;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .input {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #2C3E50;
+            width: 100%;
+        }
+
+        .button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+
+        .button:active {
+            transform: translateY(1px);
+        }
+
+        .info-button {
+            background: transparent;
+            color: #3498db;
+            border: 1px solid #3498db;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .rules-container {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            border-left: 3px solid #f39c12;
+            padding: 15px;
+            margin-bottom: 60px;
+        }
+
+        .rules-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .rule-bullet {
+            width: 6px;
+            height: 6px;
+            border-radius: 3px;
+            background-color: #f39c12;
+            margin-right: 8px;
+        }
+
+        .rule-text {
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Game Screen Styles */
+        .game-container {
+            padding: 15px;
+            min-height: 100vh;
+            background-color: #f8f8f8;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .game-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2C3E50;
+            margin-bottom: 10px;
+        }
+
+        .round-info {
+            font-size: 16px;
+            color: #34495E;
+            margin-bottom: 10px;
+        }
+
+        .winner-container {
+            background-color: #D5F5E3;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #2ECC71;
+        }
+
+        .winner-text {
+            color: #27AE60;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Score Table Styles */
+        .score-table {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 1px solid #E5E5E5;
+            max-height: 60vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-header {
+            display: flex;
+            background-color: #3498DB;
+            padding: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .table-body {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .table-row {
+            display: flex;
+            border-bottom: 1px solid #E5E5E5;
+            padding: 12px;
+        }
+
+        .table-cell {
+            flex: 1;
+            text-align: center;
+            font-size: 14px;
+            padding: 0 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .table-cell.player-name {
+            flex: 2;
+            text-align: left;
+        }
+
+        .editable-cell {
+            border-bottom: 1px dashed #3498DB;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .editable-cell:hover {
+            background-color: #f0f8ff;
+        }
+
+        .total-cell {
+            font-weight: bold;
+        }
+
+        .score-column {
+            flex: 1;
+            max-width: 45px;
+        }
+
+        /* Button Container */
+        .button-container {
+            margin-bottom: 15px;
+        }
+
+        .secondary-button {
+            background: white;
+            color: #3498DB;
+            border: 1px solid #3498DB;
+        }
+
+        .danger-button {
+            background-color: #E74C3C;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #2C3E50;
+        }
+
+        .modal-info {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #7F8C8D;
+            text-align: center;
+        }
+
+        .score-input-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 5px 0;
+        }
+
+        .player-name-label {
+            flex: 2;
+            font-size: 16px;
+            color: #2C3E50;
+        }
+
+        .score-input {
+            flex: 1;
+            border: 1px solid #BDC3C7;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+            height: 44px;
+            font-size: 16px;
+        }
+
+        .modal-button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-button {
+            flex: 1;
+        }
+
+        /* Payment Modal Styles */
+        .final-score-table {
+            margin-bottom: 20px;
+            border: 1px solid #E5E5E5;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .final-score-header {
+            display: flex;
+            background-color: #3498DB;
+            padding: 10px;
+        }
+
+        .final-score-header-text {
+            color: white;
+            font-weight: bold;
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .final-score-row {
+            display: flex;
+            border-bottom: 1px solid #E5E5E5;
+            padding: 8px;
+            background: white;
+        }
+
+        .final-score-player-name {
+            flex: 1;
+            font-weight: bold;
+            font-size: 12px;
+            color: #2C3E50;
+        }
+
+        .final-score-cell {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .final-score-total-cell {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            color: #E74C3C;
+        }
+
+        .separator {
+            height: 1px;
+            background-color: #BDC3C7;
+            margin: 15px 0;
+        }
+
+        .payment-section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2C3E50;
+            margin-bottom: 10px;
+        }
+
+        .payment-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: #F8F9F9;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .payment-text {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .receive-text {
+            color: #27AE60;
+        }
+
+        .pay-text {
+            color: #E74C3C;
+        }
+
+        /* Rules Modal Styles */
+        .rules-modal-content {
+            width: 95%;
+            max-width: 600px;
+            height: 85vh;
+        }
+
+        .rules-scroll {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2a5298;
+            margin: 15px 0 8px 0;
+        }
+
+        .paragraph {
+            font-size: 14px;
+            color: #2C3E50;
+            margin-bottom: 10px;
+            line-height: 20px;
+        }
+
+        .rules-table {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .rules-table-row {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .rules-table-header {
+            font-weight: bold;
+            background-color: #f2f2f2;
+        }
+
+        .rules-table-cell {
+            padding: 8px;
+            flex: 1;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .bullet-list {
+            margin-bottom: 15px;
+        }
+
+        .bullet-item {
+            display: flex;
+            margin-bottom: 8px;
+            align-items: flex-start;
+        }
+
+        .bullet {
+            width: 6px;
+            height: 6px;
+            border-radius: 3px;
+            background-color: #f39c12;
+            margin-right: 8px;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .bullet-text {
+            flex: 1;
+            font-size: 14px;
+            color: #2C3E50;
+            line-height: 20px;
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .setup-container {
+                padding: 15px;
+            }
+
+            .main-title {
+                font-size: 28px;
+            }
+
+            .game-container {
+                padding: 10px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+
+            .table-cell {
+                font-size: 12px;
+                padding: 0 1px;
+            }
+
+            .score-column {
+                max-width: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Setup Screen -->
+    <div id="setupScreen" class="setup-container">
+        <div class="header-container">
+            <h1 class="main-title">Hammer</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="header-line"></div>
+                <span class="card-title">Nova Partida</span>
+                <div class="header-line"></div>
+            </div>
+
+            <p class="instruction-text">Insira os nomes dos jogadores</p>
+            <p class="hint-text">(Separe com vírgula: João, Maria, Pedro)</p>
+
+            <input type="text" id="playerNames" class="input" placeholder="Nomes dos jogadores (2-5)">
+
+            <button class="button" onclick="startGame()">Iniciar Jogo</button>
+            <button class="info-button" onclick="showRulesModal()">Sobre o Jogo</button>
+        </div>
+
+        <div class="rules-container">
+            <p class="rules-title">Lembre-se das regras:</p>
+            <div class="rule-item">
+                <div class="rule-bullet"></div>
+                <span class="rule-text">Mínimo de 2 e máximo de 5 jogadores</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-bullet"></div>
+                <span class="rule-text">Jogamos 7 rodadas com objetivos diferentes</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-bullet"></div>
+                <span class="rule-text">O menor número de pontos vence</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="game-container hidden">
+        <div class="game-header">
+            <h1 class="game-title" id="gameTitle">Hammer - Rodada 1/7</h1>
+            <p class="round-info" id="roundInfo">9 cartas - Duas trincas</p>
+        </div>
+
+        <div id="winnerContainer" class="winner-container hidden">
+            <p class="winner-text" id="winnerText"></p>
+        </div>
+
+        <div class="score-table">
+            <div class="table-header" id="tableHeader">
+                <div class="table-cell player-name">Jogador</div>
+                <div class="table-cell">Total</div>
+            </div>
+            <div class="table-body" id="tableBody">
+                <!-- Linhas da tabela serão inseridas aqui -->
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button id="addScoreBtn" class="button" onclick="showAddScoreModal()">Registrar Pontos</button>
+            <button id="addPlayerBtn" class="button secondary-button" onclick="showAddPlayerModal()">Adicionar Jogador</button>
+            <button class="button danger-button" onclick="restartGame()">Reiniciar Jogo</button>
+        </div>
+    </div>
+
+    <!-- Add Score Modal -->
+    <div id="addScoreModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="scoreModalTitle">Pontuação - Rodada 1</h2>
+            <div id="scoreInputs">
+                <!-- Inputs de pontuação serão inseridos aqui -->
+            </div>
+            <div class="modal-button-container">
+                <button class="button modal-button" onclick="saveScores()">Salvar</button>
+                <button class="button secondary-button modal-button" onclick="hideAddScoreModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Player Modal -->
+    <div id="addPlayerModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Adicionar Novo Jogador</h2>
+            <p class="modal-info">O novo jogador começará com a pontuação do pior jogador atual.</p>
+            <input type="text" id="additionalPlayerName" class="input" placeholder="Nome do jogador">
+            <div class="modal-button-container">
+                <button class="button modal-button" onclick="addPlayerMidGame()">Adicionar</button>
+                <button class="button secondary-button modal-button" onclick="hideAddPlayerModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Resultado Final</h2>
+            
+            <div class="final-score-table">
+                <div class="final-score-header" id="finalScoreHeader">
+                    <div class="final-score-header-text">Jogador</div>
+                    <div class="final-score-header-text">R1</div>
+                    <div class="final-score-header-text">R2</div>
+                    <div class="final-score-header-text">R3</div>
+                    <div class="final-score-header-text">R4</div>
+                    <div class="final-score-header-text">R5</div>
+                    <div class="final-score-header-text">R6</div>
+                    <div class="final-score-header-text">R7</div>
+                    <div class="final-score-header-text">Total</div>
+                </div>
+                <div id="finalScoreBody">
+                    <!-- Linhas da tabela final serão inseridas aqui -->
+                </div>
+            </div>
+
+            <div class="separator"></div>
+
+            <h3 class="payment-section-title">Pagamentos</h3>
+            <div id="paymentContainer">
+                <!-- Pagamentos serão inseridos aqui -->
+            </div>
+
+            <div class="modal-button-container">
+                <button class="button modal-button" onclick="restartGame()">Novo Jogo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rules Modal -->
+    <div id="rulesModal" class="modal">
+        <div class="modal-content rules-modal-content">
+            <div class="rules-scroll">
+                <h2 class="modal-title">Regras do Hammer</h2>
+
+                <h3 class="section-title">Objetivo</h3>
+                <p class="paragraph">Realizar o menor número de pontos após as 7 rodadas.</p>
+
+                <h3 class="section-title">Participantes</h3>
+                <p class="paragraph">Mínimo de 2 e máximo de 5 jogadores.</p>
+
+                <h3 class="section-title">Rodadas</h3>
+                <p class="paragraph">O jogo consiste em 7 rodadas com objetivos diferentes:</p>
+
+                <div class="rules-table">
+                    <div class="rules-table-row rules-table-header">
+                        <div class="rules-table-cell">Rodada</div>
+                        <div class="rules-table-cell">Cartas</div>
+                        <div class="rules-table-cell">Objetivo</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">Primeira</div>
+                        <div class="rules-table-cell">9</div>
+                        <div class="rules-table-cell">Duas trincas</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">Segunda</div>
+                        <div class="rules-table-cell">10</div>
+                        <div class="rules-table-cell">Uma trinca e uma sequência</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">Terceira</div>
+                        <div class="rules-table-cell">11</div>
+                        <div class="rules-table-cell">Duas sequências</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">Quarta</div>
+                        <div class="rules-table-cell">12</div>
+                        <div class="rules-table-cell">Três trincas</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">Quinta</div>
+                        <div class="rules-table-cell">13</div>
+                        <div class="rules-table-cell">Duas trincas e uma sequência</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">Sexta</div>
+                        <div class="rules-table-cell">14</div>
+                        <div class="rules-table-cell">Uma trinca e duas sequências</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">Sétima</div>
+                        <div class="rules-table-cell">15</div>
+                        <div class="rules-table-cell">Três sequências</div>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Pontuação</h3>
+                <p class="paragraph">No final de cada rodada, conta-se quantos pontos, determinados pelas cartas que ficaram na mão do participante, e anota-se para ser somado no final.</p>
+
+                <div class="rules-table">
+                    <div class="rules-table-row rules-table-header">
+                        <div class="rules-table-cell">Carta</div>
+                        <div class="rules-table-cell">Pontos</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">3</div>
+                        <div class="rules-table-cell">3</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">4</div>
+                        <div class="rules-table-cell">4</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">5</div>
+                        <div class="rules-table-cell">5</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">6</div>
+                        <div class="rules-table-cell">6</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">7</div>
+                        <div class="rules-table-cell">7</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">8, 9, 10, J, Q, K</div>
+                        <div class="rules-table-cell">10</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">A</div>
+                        <div class="rules-table-cell">20</div>
+                    </div>
+                    <div class="rules-table-row">
+                        <div class="rules-table-cell">2 (coringa)</div>
+                        <div class="rules-table-cell">50</div>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Regras de Jogo</h3>
+                <div class="bullet-list">
+                    <div class="bullet-item">
+                        <div class="bullet"></div>
+                        <span class="bullet-text">Uma sequência deve possuir no mínimo 4 cartas seguidas.</span>
+                    </div>
+                    <div class="bullet-item">
+                        <div class="bullet"></div>
+                        <span class="bullet-text">Uma trinca deve ter três cartas de naipes diferentes.</span>
+                    </div>
+                    <div class="bullet-item">
+                        <div class="bullet"></div>
+                        <span class="bullet-text">Você pode colocar cartas no jogo do adversário em sua vez, e essa carta colocada não pode ser descartada.</span>
+                    </div>
+                    <div class="bullet-item">
+                        <div class="bullet"></div>
+                        <span class="bullet-text">Em um descarte, qualquer pessoa pode reivindicar a última carta descartada, tendo preferência a ordem dos participantes.</span>
+                    </div>
+                    <div class="bullet-item">
+                        <div class="bullet"></div>
+                        <span class="bullet-text">Caso baixe um jogo incorreto, perde-se a oportunidade de comprar o descarte de qualquer outro jogador que não seja o imediatamente antes dessa pessoa.</span>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Pagamento (Quando Envolvendo Dinheiro)</h3>
+                <p class="paragraph">O vencedor de cada rodada recebe um pingo de 25 centavos. No final, será subtraída a pontuação do campeão do jogo dos demais participantes, sendo o valor restante pago em centavos.</p>
+            </div>
+
+            <button class="button" onclick="hideRulesModal()">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        // Dados do jogo
+        let players = [];
+        let currentRound = 1;
+        let editingRound = null;
+        let scoreInputs = {};
+
+        // Definição das rodadas
+        const rounds = [
+            { number: 1, cards: 9, objective: 'Duas trincas' },
+            { number: 2, cards: 10, objective: 'Uma trinca e uma sequência' },
+            { number: 3, cards: 11, objective: 'Duas sequências' },
+            { number: 4, cards: 12, objective: 'Três trincas' },
+            { number: 5, cards: 13, objective: 'Duas trincas e uma sequência' },
+            { number: 6, cards: 14, objective: 'Uma trinca e duas sequências' },
+            { number: 7, cards: 15, objective: 'Três sequências' },
+        ];
+
+        // Funções de utilidade
+        function formatScore(score) {
+            const scoreStr = score.toString();
+            if (scoreStr.length > 5) {
+                return `${scoreStr.substring(0, 5)}...`;
+            }
+            return scoreStr;
+        }
+
+        function findRoundWinner(players, roundIndex) {
+            if (roundIndex < 0 || players.length === 0) return null;
+
+            let minScore = Infinity;
+            let winner = null;
+
+            players.forEach(player => {
+                if (player.scores.length > roundIndex) {
+                    const score = player.scores[roundIndex];
+                    if (score < minScore) {
+                        minScore = score;
+                        winner = player;
+                    }
+                }
+            });
+
+            return winner;
+        }
+
+        function calculatePayments(players) {
+            const minScore = Math.min(...players.map(player => player.total));
+            const winner = players.find(player => player.total === minScore);
+
+            if (!winner || players.filter(player => player.total === minScore).length > 1) {
+                return players.map(player => ({
+                    ...player,
+                    payment: 0,
+                }));
+            }
+
+            let totalToPay = 0;
+            players.forEach(player => {
+                if (player.total !== minScore) {
+                    totalToPay += (player.total - minScore) / 100;
+                }
+            });
+
+            return players.map(player => {
+                if (player.total === minScore) {
+                    return {
+                        ...player,
+                        payment: -totalToPay,
+                    };
+                } else {
+                    const paymentAmount = (player.total - minScore) / 100;
+                    return {
+                        ...player,
+                        payment: paymentAmount,
+                    };
+                }
+            });
+        }
+
+        // Funções de tela
+        function startGame() {
+            const playerNamesInput = document.getElementById('playerNames').value.trim();
+            
+            if (playerNamesInput === '') {
+                alert('Por favor, insira um nome para o jogador');
+                return;
+            }
+
+            const playerNames = playerNamesInput.split(',').map(name => name.trim()).filter(name => name !== '');
+
+            if (playerNames.length < 2 || playerNames.length > 5) {
+                alert('O jogo deve ter entre 2 e 5 jogadores');
+                return;
+            }
+
+            players = playerNames.map((name, index) => ({
+                id: `player-${index + 1}`,
+                name,
+                scores: [],
+                total: 0,
+                payment: 0,
+            }));
+
+            currentRound = 1;
+            editingRound = null;
+            scoreInputs = {};
+
+            showGameScreen();
+            updateGameDisplay();
+        }
+
+        function restartGame() {
+            players = [];
+            currentRound = 1;
+            editingRound = null;
+            scoreInputs = {};
+            
+            hideAllModals();
+            showSetupScreen();
+            
+            document.getElementById('playerNames').value = '';
+        }
+
+        function showSetupScreen() {
+            document.getElementById('setupScreen').classList.remove('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
+        }
+
+        function showGameScreen() {
+            document.getElementById('setupScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+        }
+
+        function updateGameDisplay() {
+            // Atualizar título e informações da rodada
+            const gameTitle = document.getElementById('gameTitle');
+            const roundInfo = document.getElementById('roundInfo');
+            
+            if (currentRound <= 7) {
+                gameTitle.textContent = `Hammer - Rodada ${currentRound}/7`;
+                const roundData = rounds[currentRound - 1];
+                roundInfo.textContent = `${roundData.cards} cartas - ${roundData.objective}`;
+            } else {
+                gameTitle.textContent = 'Hammer - Jogo Finalizado!';
+                roundInfo.textContent = 'Jogo finalizado!';
+            }
+
+            // Mostrar vencedor da rodada anterior
+            const winner = findRoundWinner(players, currentRound - 2);
+            const winnerContainer = document.getElementById('winnerContainer');
+            const winnerText = document.getElementById('winnerText');
+            
+            if (winner && currentRound > 1) {
+                winnerText.textContent = `Vencedor da rodada ${currentRound - 1}: ${winner.name} (${winner.scores[currentRound - 2]} pts)`;
+                winnerContainer.classList.remove('hidden');
+            } else {
+                winnerContainer.classList.add('hidden');
+            }
+
+            // Atualizar tabela de pontuação
+            updateScoreTable();
+
+            // Atualizar botões
+            const addScoreBtn = document.getElementById('addScoreBtn');
+            const addPlayerBtn = document.getElementById('addPlayerBtn');
+            
+            if (currentRound <= 7) {
+                addScoreBtn.classList.remove('hidden');
+                if (players.length < 5) {
+                    addPlayerBtn.classList.remove('hidden');
+                } else {
+                    addPlayerBtn.classList.add('hidden');
+                }
+            } else {
+                addScoreBtn.classList.add('hidden');
+                addPlayerBtn.classList.add('hidden');
+            }
+        }
+
+        function updateScoreTable() {
+            // Atualizar cabeçalho da tabela
+            const tableHeader = document.getElementById('tableHeader');
+            const maxRounds = currentRound > 7 ? 7 : currentRound - 1;
+            
+            let headerHTML = '<div class="table-cell player-name">Jogador</div>';
+            
+            for (let i = 1; i <= maxRounds; i++) {
+                headerHTML += `<div class="table-cell score-column">R${i}</div>`;
+            }
+            
+            headerHTML += '<div class="table-cell">Total</div>';
+            tableHeader.innerHTML = headerHTML;
+
+            // Atualizar corpo da tabela
+            const tableBody = document.getElementById('tableBody');
+            let bodyHTML = '';
+
+            players.forEach(player => {
+                bodyHTML += '<div class="table-row">';
+                bodyHTML += `<div class="table-cell player-name" title="${player.name}">${player.name}</div>`;
+                
+                for (let i = 0; i < maxRounds; i++) {
+                    const score = player.scores[i];
+                    const scoreText = score !== undefined ? formatScore(score) : '-';
+                    bodyHTML += `<div class="table-cell score-column editable-cell" onclick="editScore(${i})" title="Clique para editar">${scoreText}</div>`;
+                }
+                
+                bodyHTML += `<div class="table-cell total-cell">${formatScore(player.total)}</div>`;
+                bodyHTML += '</div>';
+            });
+
+            tableBody.innerHTML = bodyHTML;
+        }
+
+        function editScore(roundIndex) {
+            editingRound = roundIndex;
+            
+            // Preencher entradas de pontuação com os valores atuais
+            scoreInputs = {};
+            players.forEach(player => {
+                if (player.scores[roundIndex] !== undefined) {
+                    scoreInputs[player.id] = player.scores[roundIndex].toString();
+                }
+            });
+
+            showAddScoreModal();
+        }
+
+        // Funções de modal
+        function hideAllModals() {
+            document.getElementById('addScoreModal').classList.remove('show');
+            document.getElementById('addPlayerModal').classList.remove('show');
+            document.getElementById('paymentModal').classList.remove('show');
+            document.getElementById('rulesModal').classList.remove('show');
+        }
+
+        function showAddScoreModal() {
+            const modal = document.getElementById('addScoreModal');
+            const title = document.getElementById('scoreModalTitle');
+            const inputs = document.getElementById('scoreInputs');
+            
+            if (editingRound !== null) {
+                title.textContent = `Editar Pontuação - Rodada ${editingRound + 1}`;
+            } else {
+                title.textContent = `Pontuação - Rodada ${currentRound}`;
+            }
+
+            let inputsHTML = '';
+            players.forEach(player => {
+                const value = scoreInputs[player.id] || '';
+                inputsHTML += `
+                    <div class="score-input-container">
+                        <label class="player-name-label">${player.name}</label>
+                        <input type="number" class="score-input" placeholder="Pontos" value="${value}" 
+                               onchange="updateScoreInput('${player.id}', this.value)">
+                    </div>
+                `;
+            });
+
+            inputs.innerHTML = inputsHTML;
+            modal.classList.add('show');
+        }
+
+        function hideAddScoreModal() {
+            document.getElementById('addScoreModal').classList.remove('show');
+            editingRound = null;
+            scoreInputs = {};
+        }
+
+        function updateScoreInput(playerId, value) {
+            scoreInputs[playerId] = value;
+        }
+
+        function saveScores() {
+            // Verificar se todos os jogadores têm pontuação inserida
+            const allPlayersHaveScores = players.every(player =>
+                scoreInputs[player.id] !== undefined && scoreInputs[player.id].trim() !== ''
+            );
+
+            if (!allPlayersHaveScores) {
+                alert('Por favor, insira a pontuação para todos os jogadores');
+                return;
+            }
+
+            // Atualizar pontuações
+            players = players.map(player => {
+                const score = parseInt(scoreInputs[player.id] || '0', 10);
+                let newScores = [...player.scores];
+
+                if (editingRound !== null && editingRound < newScores.length) {
+                    newScores[editingRound] = score;
+                } else {
+                    newScores.push(score);
+                }
+
+                const newTotal = newScores.reduce((sum, score) => sum + score, 0);
+
+                return {
+                    ...player,
+                    scores: newScores,
+                    total: newTotal,
+                    payment: 0,
+                };
+            });
+
+            hideAddScoreModal();
+
+            // Verificar se chegamos ao final do jogo
+            if (currentRound === 7 && editingRound === null) {
+                players = calculatePayments(players);
+                showPaymentModal();
+            } else if (editingRound === null) {
+                currentRound++;
+            }
+
+            updateGameDisplay();
+        }
+
+        function showAddPlayerModal() {
+            document.getElementById('additionalPlayerName').value = '';
+            document.getElementById('addPlayerModal').classList.add('show');
+        }
+
+        function hideAddPlayerModal() {
+            document.getElementById('addPlayerModal').classList.remove('show');
+        }
+
+        function addPlayerMidGame() {
+            const nameInput = document.getElementById('additionalPlayerName');
+            const name = nameInput.value.trim();
+            
+            if (name === '') {
+                alert('Por favor, insira um nome para o jogador');
+                return;
+            }
+
+            if (players.length >= 5) {
+                alert('O jogo já atingiu o número máximo de 5 jogadores');
+                return;
+            }
+
+            // Encontrar a pior pontuação atual
+            let worstScore = 0;
+            if (players.length > 0) {
+                worstScore = Math.max(...players.map(player => player.total));
+            }
+
+            // Criar array de pontuações para o novo jogador
+            const newPlayerScores = [];
+            for (let i = 0; i < currentRound - 1; i++) {
+                if (i === 0) {
+                    newPlayerScores.push(worstScore);
+                } else {
+                    newPlayerScores.push(0);
+                }
+            }
+
+            const newPlayer = {
+                id: `player-${players.length + 1}`,
+                name: name,
+                scores: newPlayerScores,
+                total: worstScore,
+                payment: 0,
+            };
+
+            players.push(newPlayer);
+            hideAddPlayerModal();
+            updateGameDisplay();
+        }
+
+        function showPaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            
+            // Atualizar tabela de pontuações finais
+            const finalScoreBody = document.getElementById('finalScoreBody');
+            let bodyHTML = '';
+
+            players.forEach(player => {
+                bodyHTML += '<div class="final-score-row">';
+                bodyHTML += `<div class="final-score-player-name">${player.name}</div>`;
+                
+                for (let i = 0; i < 7; i++) {
+                    const score = player.scores[i];
+                    bodyHTML += `<div class="final-score-cell">${score !== undefined ? score : '-'}</div>`;
+                }
+                
+                bodyHTML += `<div class="final-score-total-cell">${player.total}</div>`;
+                bodyHTML += '</div>';
+            });
+
+            finalScoreBody.innerHTML = bodyHTML;
+
+            // Atualizar pagamentos
+            const paymentContainer = document.getElementById('paymentContainer');
+            let paymentHTML = '';
+
+            players.forEach(player => {
+                const isReceiving = player.payment < 0;
+                const amount = Math.abs(player.payment).toFixed(2);
+                const textClass = isReceiving ? 'receive-text' : 'pay-text';
+                const text = isReceiving ? `Recebe R$ ${amount}` : `Paga R$ ${amount}`;
+                
+                paymentHTML += `
+                    <div class="payment-container">
+                        <span class="player-name-label">${player.name}</span>
+                        <span class="payment-text ${textClass}">${text}</span>
+                    </div>
+                `;
+            });
+
+            paymentContainer.innerHTML = paymentHTML;
+            modal.classList.add('show');
+        }
+
+        function showRulesModal() {
+            document.getElementById('rulesModal').classList.add('show');
+        }
+
+        function hideRulesModal() {
+            document.getElementById('rulesModal').classList.remove('show');
+        }
+
+        // Event listeners para fechar modais clicando fora
+        document.addEventListener('click', function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                    if (modal.id === 'addScoreModal') {
+                        editingRound = null;
+                        scoreInputs = {};
+                    }
+                }
+            });
+        });
+
+        // Prevenir zoom no iOS em inputs
+        document.addEventListener('touchstart', function(event) {
+            if (event.target.tagName === 'INPUT' && event.target.type === 'number') {
+                event.target.style.fontSize = '16px';
+            }
+        });
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Aplicar foco no input principal
+            document.getElementById('playerNames').focus();
+        });
+    </script>
+</body>
+</html>
